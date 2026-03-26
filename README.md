@@ -1,6 +1,6 @@
 # 📚 EPUB Bilingual Translator
 
-基于大语言模型（LLM）的 EPUB 双语对照生成工具。将英文（或其他语言）EPUB 电子书转换为「原文段落 + 中文译文段落」逐段对照格式的 EPUB，方便语言学习与对照阅读。
+基于大语言模型（LLM）的 EPUB 双语对照生成工具。将英文（或其他语言）EPUB/PDF 电子书/论文转换为「原文段落 + 中文译文段落」逐段对照格式的 EPUB，方便语言学习与对照阅读。
 
 本项目通过 OpenRouter API 接入多种主流大模型（如 Gemini, Claude, GPT-4 等），支持批量翻译、自动重试与样式美化。
 
@@ -18,7 +18,13 @@
 确保已安装 Python 3.6+，然后安装所需库：
 
 ```bash
-pip install ebooklib beautifulsoup4 requests
+pip install ebooklib beautifulsoup4 requests pdfminer.six
+```
+
+如果需要处理扫描版PDF，则还需安装：
+
+```bash
+pip install pdf2image pytesseract
 ```
 
 ## 🚀 快速开始
@@ -44,6 +50,18 @@ pip install ebooklib beautifulsoup4 requests
 python epub_bilingual.py input.epub
 ```
 
+转换文字型 PDF（自动检测）
+
+```bash
+python epub_bilingual.py book.pdf --api-key sk-or-xxx
+```
+
+扫描版（自动检测，也可强制）
+
+```bash
+python epub_bilingual.py scan.pdf --api-key sk-or-xxx --force-ocr
+```
+
 ### 3. 高级用法
 
 指定输出文件、模型及翻译参数：
@@ -54,6 +72,18 @@ python epub_bilingual.py input.epub output_bilingual.epub \
     --batch 5 \
     --delay 1.0 \
     --from-lang English
+```
+
+扫描质量差，提高 DPI
+
+```bash
+python epub_bilingual.py scan.pdf --api-key sk-or-xxx --ocr-dpi 400
+```
+
+非英文 PDF（如德语）
+
+```bash
+python epub_bilingual.py german.pdf --api-key sk-or-xxx --from-lang German --ocr-lang deu
 ```
 
 ## ⚙️ 命令行选项
